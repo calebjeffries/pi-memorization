@@ -10,23 +10,38 @@ int main() {
     init_pair(2, COLOR_RED, COLOR_BLACK);
   }
   cbreak();
-  addstr("3.");
-  for (int digitnum = 0; digitnum < 999; digitnum++) {
+  while (1) {
+    addstr("3.");
+    for (int digitnum = 0; digitnum < 999; digitnum++) {
+      noecho();
+      char x = (char)getch();
+      echo();
+      if (x == PI[digitnum]) {
+        attron(COLOR_PAIR(1));
+        addch(x);
+        attroff(COLOR_PAIR(1));
+      } else {
+        attron(COLOR_PAIR(2));
+        addch(x);
+        attroff(COLOR_PAIR(2));
+        attron(COLOR_PAIR(1));
+        mvaddch(1, digitnum + 2, PI[digitnum]);
+        attroff(COLOR_PAIR(1));
+        addstr("\nWRONG\nPress any key to continue...");
+        break;
+      }
+    }
     noecho();
-    char x = (char)getch();
+    getch();
     echo();
-    if (x == PI[digitnum]) {
-      attron(COLOR_PAIR(1));
-      addch(x);
-      attroff(COLOR_PAIR(1));
-    } else {
-      attron(COLOR_PAIR(2));
-      addch(x);
-      attroff(COLOR_PAIR(2));
-      addstr("\nWRONG\nPress any key to exit...");
+    addstr("\nTry again? [y/n] ");
+    noecho();
+    char contchar = getch();
+    echo();
+    if (contchar == 'n' || contchar == 'N') {
       break;
     }
+    clear();
   }
-  getch();
   endwin();
 }
